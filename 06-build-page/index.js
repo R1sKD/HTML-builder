@@ -2,7 +2,6 @@ const path = require('path');
 const fs = require('fs');
 const { copyFile, mkdir, readdir } = require('fs/promises');
 
-
 const assetsPath = path.join(__dirname, 'assets');
 const destinationPath = path.join(__dirname, 'project-dist');
 mkdir(destinationPath, {recursive: true});
@@ -54,5 +53,43 @@ function copyDir(src, dest) {
   }
 }
 
+function createStyleCss() {
+  const cssFile = path.join(destinationPath, 'style.css');
+  const source = path.join(__dirname, 'styles');
+  fs.writeFile(
+    cssFile,
+    '',
+    err => {
+      if (err) console.error(err);
+    }
+  );
+  try {
+    const files = readdir(source, {
+      withFileTypes: true
+    });
+    files.then(function (files) {
+      for (const file of files) {
+        if (file.isFile() && path.extname(file.name) === '.css') {
+          fs.readFile(path.join(source, file.name), (err, data) => {
+            if (err) throw err;
+            fs.appendFile(
+              cssFile,
+              data.toString(),
+              err => {
+                if (err) throw err;
+              }
+            );
+          });
+        };
+      }
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+
+
 removeFiles(destinationPath);
 copyDir(assetsPath, path.join(destinationPath, 'assets'));
+createStyleCss();
