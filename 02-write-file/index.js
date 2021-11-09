@@ -21,7 +21,10 @@ function close() {
 }
 
 function writeText(text) {
-  if (text === 'exit') close();
+  if (text === 'exit') {
+    close();
+    return;
+  }
   fs.appendFile(
     path.join(__dirname, 'text.txt'),
     text,
