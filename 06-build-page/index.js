@@ -9,12 +9,12 @@ const destinationPath = path.join(__dirname, 'project-dist');
 mkdir(destinationPath, {recursive: true});
 mkdir(path.join(destinationPath, 'assets'), {recursive: true});
 
-function removeFiles(dir) {
+async function removeFiles(dir) {
   try {
     const files = readdir(dir, {
       withFileTypes: true
     });
-    files.then(function (files) {
+    await files.then(function (files) {
       for (const file of files) {
         if (!file.isFile()) {
           let dirPath = path.join(dir, file.name);
@@ -29,7 +29,7 @@ function removeFiles(dir) {
   } catch (err) {
     console.error(err);
   }
-  emitter.emit('delete');
+  // emitter.emit('delete');
 }
 
 function copyDir(src, dest) {
@@ -123,7 +123,11 @@ function createHTML() {
   });
 }
 
-removeFiles(destinationPath);
+(async function start() {
+  await removeFiles(destinationPath);
+  emitter.emit('delete');
+})()
+
 emitter.on('delete', () => {
   copyDir(assetsPath, path.join(destinationPath, 'assets'));
   createStyleCss();
