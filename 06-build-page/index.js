@@ -29,7 +29,6 @@ async function removeFiles(dir) {
   } catch (err) {
     console.error(err);
   }
-  // emitter.emit('delete');
 }
 
 function copyDir(src, dest) {
@@ -83,7 +82,7 @@ function createStyleCss() {
               }
             );
           });
-        };
+        }
       }
     });
   } catch (err) {
@@ -119,14 +118,15 @@ function createHTML() {
           }
         }
       );
-    };
+    }
   });
 }
 
-(async function start() {
+async function start() {
   await removeFiles(destinationPath);
   emitter.emit('delete');
-})()
+}
+start();
 
 emitter.on('delete', () => {
   copyDir(assetsPath, path.join(destinationPath, 'assets'));
