@@ -26,7 +26,7 @@ function checkFileInfo(file) {
     path.join(dirPath, file),
     (err, stats) => {
       if (err) throw err;
-      console.log(`${name} - ${ext} - ${stats.size} kb`);
+      console.log(`${name} - ${ext} - ${stats.size / 1000} kb`);
     }
   )
 }
